@@ -38,12 +38,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <iron-list items="[[data.result]]" style="height:40em" as="item">
     <template>
       <div class="card">
+				<div>
 				Pertanyaan: [[item.pertanyaan]]? <br>
 				<paper-radio-group attr-for-selected="value" >
 					<template is="dom-repeat" items="[[item.pilihan]]">
-						<paper-radio-button name="item-radio" value="{{ item }}" id="item-radio" noink>{{item}}</paper-radio-button><br>
+						<paper-radio-button name="radio-item" value="{{ item }}" id="item-radio" noink>{{item}}</paper-radio-button><br>
 					</template>
 				</paper-radio-group>
+				</div>
       </div>
    </template>
   </iron-list>		
