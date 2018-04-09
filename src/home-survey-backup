@@ -29,7 +29,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="home-surveys">
   <template>
 		<style include="granite-bootstrap"></style>
-
+<!--
+		<script>
+		$("input:checkbox").on('click', function() {
+			var $box = $(this);
+			if ($box.is(":checked")) {
+				var group = "input:checkbox[name='" + $box.attr("name") + "']";
+				$(group).prop("checked", false);
+				$box.prop("checked", true);
+			} else {
+				$box.prop("checked", false)
+			}
+		});
+		
+		</script>
+-->
     <style include="shared-styles">
       :host {
         display: block;
@@ -92,116 +106,111 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      handle-as="json"
      last-response="{{data}}">
     </iron-ajax>
+		
+		<!--<input type="radio" id="pil1" name="radio-button" value="pilihan1"> Pilihan 1 <br>
+    <input type="radio" id="pil2" name="radio-button" value="pilihan2"> Pilihan 2 <br>
+    <input type="radio" id="pil3" name="radio-button" value="pilihan3"> Pilihan 3 <br>
+    <br>
+    <button onclick="response()" value="Kirim">Kirim</button> <br>
+  
+    <script>      
+      function response() {
+        var qsel = document.querySelector('#pil1').value;
+      	var prints = document.getElementById("pil2").getAttribute("selected");
+      	console.log("Pilihan anda : " + prints);
+      	console.log(qsel);
+      }
+    </script>
+		-->
 
-		<iron-form id="myForm">
-				<form method="get">
-					<h1>{{title}}</h1>
-
-					<iron-list items="[[data.result]]" style="height:40em" as="item">						
+				<!--<iron-list items="[[data.result]]" style="height:40em" as="item">
 					<template>
 						<paper-card class="q offset-sm-2">
-							<h5 style="margin-top: 20px;">Pertanyaan: [[item.pertanyaan]]?<br></h5>
-							[[item.id_poll]]
+							<h5 style="margin-top: 20px;">Pertanyaan: [[item.pertanyaan]]? <br></h5>
+							<p hidden>[[item.id_poll]]</p>
 							<div>
-								<paper-radio-group attr-for-selected="value" id="radioGroup" selected="{{selected}}">
+								<paper-radio-group attr-for-selected="value" id="radioGroup">
 									<template is="dom-repeat" items="[[item.pilihan]]">
-										<paper-radio-button 
-										name="jawaban" 
-										class="radio" 
-										value="{{item}}"
-										id="itemRadio"
-										>
-										{{item}}
-									</paper-radio-button><br>
-								</template>
-							</paper-radio-group>
-						</div>
-						<input type="text" name="idPolls" value="[[item.id_poll]]" hidden>
-						<input type="text" name="idSurvey" value="[[item.id_survey]]" hidden>
+										<paper-radio-button name="radioItem" class="radio" value="{{item}}" label="{{item}}" id="itemRadio">{{item}}</paper-radio-button><br>
+									</template>
+								</paper-radio-group>
+							</div>
 						</paper-card>
-					<!--<input type="text" name="id_survey" value="[[item.id_survey]]">
-					<input type="text" name="id_responden" value="2" >-->
 					</template>			 
-				</iron-list>
-				<paper-card class="q offset-sm-2">
-					<!-- <button type="submit" value="Tampilkan">Submit</button> -->
-					<paper-button raised on-click="submit">Submit 2</paper-button>
-					<!-- <button type="button" on-click="doNotResponse" value="No">Not a Submit Button</button> -->
-				</paper-card>
-				</form>
-		</iron-form>		
-
-		<div class="output"></div>
-		<!-- <script>
-			const myForm = this.$['myForm'];
-			myForm.addEventListener('iron-form-submit', function(event) {
-				this.querySelector('.output').innerHTML = JSON.stringify(event.detail);
-			});
-		</script> -->
+				</iron-list>-->
+		
+		
+	<iron-form id="response-form">
+	<form method="get">
+		<paper-card class="q offset-sm-2">
+			<h5 style="margin-top: 20px;">Pertanyaan: Tentukan Pilihanmu! <br></h5>
+			<paper-radio-group attr-for-selected="value" id="radioGroup" selected="{{selected}}">
+				<paper-radio-button name="radioItem" class="radio" value="Pilihan1" label="Pilihan1" id="itemRadio">Pilihan 1</paper-radio-button><br>
+				<paper-radio-button name="radioItem" class="radio" value="Pilihan2" label="Pilihan2" id="itemRadio">Pilihan 2</paper-radio-button><br>
+				<paper-radio-button name="radioItem" class="radio" value="Pilihan3" label="Pilihan3" id="itemRadio">Pilihan 3</paper-radio-button><br>
+				<paper-radio-button name="radioItem" class="radio" value="Pilihan4" label="Pilihan4" id="itemRadio">Pilihan 4</paper-radio-button><br>
+				<paper-radio-button name="radioItem" class="radio" value="Pilihan5" label="Pilihan5" id="itemRadio">Pilihan 5</paper-radio-button><br>
+			</paper-radio-group>
+		<br>
+			<paper-button onclick="response" style="float: none;" class="green offset-md-2" noink>Submit</paper-button>		
+		</paper-card>
+							
+		</form>
+		</iron-form>
+		
 	</template>
  
   <script>		
 		class HomeSurveys extends Polymer.Element {
-				static get is() { 
+      static get is() { 
         return 'home-surveys';
 			}
-
+			
 			/*getSurvey(){
          this.$.getSurveyAjax.generateRequest();
-       }*/
+       }*/			
 			
 			connectedCallback() {
         super.connectedCallback();
-        
-        const form = this.$['myForm'];
+        console.log("Connected Callback!");
+        const form = this.$['response-form'];
         form.addEventListener('iron-form-presubmit', function (event) {
-					console.log(JSON.stringify(event.detail));
           event.preventDefault();
-          
-					var formData = form.serializeForm('');
-					console.log(formData);
-
-					// console.log(formData);
-
-					var id_survey = formData.idSurvey[0];
-          // console.log(id_survey);
-
-					var id_poll = formData.idPolls;
-          // console.log(id_poll);
-
-					var item = formData.jawaban;
-					console.log(item);
-					
-					var hasil_jawab = {};
-					// var key = id_poll;
-					// var value = {item};
-
-					for (var x = 0; x < id_poll.length; x++ ) {
-						hasil_jawab[id_poll[x]] = item[x];
-					}
-					
-					console.log(hasil_jawab);
-					var hasilJawabString = JSON.stringify(hasil_jawab);
-					// console.log('{"hasil_jawab": ', hasilJawabString ,', "id_responden": "1", "id_survey": "' + id_survey + '"} ');
-				});
-
+          console.log("I'm called two times");
+          console.log(form.serializeForm(''));
+        });
       }
-
-			submit() {
-				this.$['myForm'].submit();
-			}
 			
-			/* doNotResponse() {
-        console.log("I only appear one time");
-				// this.$['my-form'].submit();
+			response() {
+        console.log("I only appear one time, nama()");
+        console.log("I only appear one time, telp()");
+        this.$['my-form'].submit();
+      }
+						
+			/*response() {
 				var prints = document.getElementById("radioGroup").getAttribute("selected");
 				console.log(prints);
-      } */
-		}
-				/* _submit: function() {
-					this.$.form.submit();
-				} */
-
-		window.customElements.define(HomeSurveys.is, HomeSurveys);
+			}*/
+		}		
+					
+		/*connectedCallback() {
+			super.connectedCallback();
+			const form = this.$.responseForm;
+			form.addEventListener('iron-form-presubmit', function (event) {
+				event.preventDefault();
+				console.log("here")
+				console.log(form.serialize());
+			});
+		}*/
+		
+		/*var radioValue;
+		
+		function responseSubmit() {
+			
+			console.log(document.getElementById('pilihan'));
+		
+		}*/
+		
+    window.customElements.define(HomeSurveys.is, HomeSurveys);
   </script>
 </dom-module>
