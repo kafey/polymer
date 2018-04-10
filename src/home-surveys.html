@@ -78,10 +78,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		 method="post"
 		 content-type="application/json"
 		 handle-as="json"
-		 on-response="_handleAjaxPostResponse"
-		 on-error="_handleAjaxPostError"
-		 body='{{postBody}}'
-		 last-response="{{data}}">
+		 on-response="_onResponse"
+		 on-error="_onError"
+		 >
 		</iron-ajax>
 		
     <iron-ajax
@@ -97,16 +96,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				<form method="get">
 					<h1>{{title}}</h1>
 
-					<iron-list items="[[data.result]]" style="height:40em" as="item">						
+					<iron-list items="[[data.result]]" style="height:40em" as="list">						
 					<template>
 						<paper-card class="q offset-sm-2">
-							<h5 style="margin-top: 20px;">Pertanyaan: [[item.pertanyaan]]?<br></h5>
-							[[item.id_poll]]
+							<h5 style="margin-top: 20px;">Pertanyaan: [[list.pertanyaan]]?<br></h5>
 							<div>
-								<paper-radio-group attr-for-selected="value" id="radioGroup" selected="{{selected}}">
-									<template is="dom-repeat" items="[[item.pilihan]]">
+								<paper-radio-group attr-for-selected="value" id="radioGroup" name="jawaban" selected="{{selected}}">
+									<template is="dom-repeat" items="[[list.pilihan]]">
 										<paper-radio-button 
-										name="jawaban" 
+										name="jawabanX[[list.id_poll]]" 
 										class="radio" 
 										value="{{item}}"
 										id="itemRadio"
@@ -116,28 +114,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 								</template>
 							</paper-radio-group>
 						</div>
-						<input type="text" name="idPolls" value="[[item.id_poll]]" hidden>
-						<input type="text" name="idSurvey" value="[[item.id_survey]]" hidden>
+						<input type="text" name="idPolls" value="[[list.id_poll]]" hidden>
+						<input type="text" name="idSurvey" value="[[list.id_survey]]" hidden>
 						</paper-card>
-					<!--<input type="text" name="id_survey" value="[[item.id_survey]]">
-					<input type="text" name="id_responden" value="2" >-->
 					</template>			 
 				</iron-list>
 				<paper-card class="q offset-sm-2">
-					<!-- <button type="submit" value="Tampilkan">Submit</button> -->
-					<paper-button raised on-click="submit">Submit 2</paper-button>
-					<!-- <button type="button" on-click="doNotResponse" value="No">Not a Submit Button</button> -->
+					<paper-button raised on-click="mySubmit">Submit</paper-button>
 				</paper-card>
 				</form>
 		</iron-form>		
-
-		<div class="output"></div>
-		<!-- <script>
-			const myForm = this.$['myForm'];
-			myForm.addEventListener('iron-form-submit', function(event) {
-				this.querySelector('.output').innerHTML = JSON.stringify(event.detail);
-			});
-		</script> -->
 	</template>
  
   <script>		
@@ -150,57 +136,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          this.$.getSurveyAjax.generateRequest();
        }*/
 			
-			connectedCallback() {
-        super.connectedCallback();
-        
-        const form = this.$['myForm'];
-        form.addEventListener('iron-form-presubmit', function (event) {
-					console.log(JSON.stringify(event.detail));
-          event.preventDefault();
-          
-					var formData = form.serializeForm('');
-					console.log(formData);
+			mySubmit() {
+			var formData =	this.$['myForm'].serializeForm();
+			var formJSON = JSON.stringify(formData);
+			
+				var id_survey = formData.idSurvey[0];
+				var id_poll = formData.idPolls;
+				var hasil_jawab = {};
 
-					// console.log(formData);
+				for (var key in formData) {
+					if (key.includes("jawaban")){
+						var strSplit = key.split("X");
+						
+						hasil_jawab[strSplit[1]] = formData[key];
+					}
+				}
+				var result = {};
+				result['hasil_jawab'] = hasil_jawab; 	
+				result['id_responden'] = "1"; 	
+				result['id_survey'] = formData.idSurvey[0]; 
 
-					var id_survey = formData.idSurvey[0];
-          // console.log(id_survey);
-
-					var id_poll = formData.idPolls;
-          // console.log(id_poll);
-
-					var item = formData.jawaban;
-					console.log(item);
-					
-					var hasil_jawab = {};
-					// var key = id_poll;
-					// var value = {item};
-
-					for (var x = 0; x < id_poll.length; x++ ) {
-						hasil_jawab[id_poll[x]] = item[x];
+					if (JSON.stringify(hasil_jawab) === "{}"){
+						alert("Isi Minimal 1");
+						console.log(hasil_jawab);
+					} else {
+						this.$.postRespondenAjax.body = result;
+						this.$.postRespondenAjax.generateRequest();
+						console.log(hasil_jawab);
 					}
 					
-					console.log(hasil_jawab);
-					var hasilJawabString = JSON.stringify(hasil_jawab);
-					// console.log('{"hasil_jawab": ', hasilJawabString ,', "id_responden": "1", "id_survey": "' + id_survey + '"} ');
-				});
-
-      }
-
-			submit() {
-				this.$['myForm'].submit();
 			}
 			
-			/* doNotResponse() {
-        console.log("I only appear one time");
-				// this.$['my-form'].submit();
-				var prints = document.getElementById("radioGroup").getAttribute("selected");
-				console.log(prints);
-      } */
+			_onResponse() {
+				alert("Berhasil");
+			} 
+			_onError() {
+				alert("Gagal");
+			}
 		}
-				/* _submit: function() {
-					this.$.form.submit();
-				} */
 
 		window.customElements.define(HomeSurveys.is, HomeSurveys);
   </script>
