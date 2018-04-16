@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/granite-bootstrap/granite-bootstrap.html">
 <link rel="import" href="../bower_components/paper-styles/color.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
@@ -36,6 +37,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+
+			.yellow-button {
+				text-transform: none;
+				color: #eeff41;
+			}
+
+			.toastCenter {
+				width: 450px;
+				margin-left: calc(50vw - 150px);
+				position: fixed top;
+			}
 			
 			paper-radio-group {
 				padding: 15px;
@@ -80,6 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		 handle-as="json"
 		 on-response="_onResponse"
 		 on-error="_onError"
+		 last-response="response"
 		 >
 		</iron-ajax>
 		
@@ -98,8 +111,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 					<iron-list items="[[data.result]]" style="height:40em" as="list">						
 					<template>
-						<paper-card class="q offset-sm-2">
-							<h5 style="margin-top: 20px;">Pertanyaan: [[list.pertanyaan]]?<br></h5>
+						<paper-card id="paperCard" class="q offset-sm-2">
+							<h5 style="margin-top: 20px;">[[list.pertanyaan]]?<br></h5>
 							<div>
 								<paper-radio-group attr-for-selected="value" id="radioGroup" name="jawaban" selected="{{selected}}">
 									<template is="dom-repeat" items="[[list.pilihan]]">
@@ -108,6 +121,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 										class="radio" 
 										value="{{item}}"
 										id="itemRadio"
+										noink
 										>
 										{{item}}
 									</paper-radio-button><br>
@@ -122,8 +136,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				<paper-card class="q offset-sm-2">
 					<paper-button raised on-click="mySubmit">Submit</paper-button>
 				</paper-card>
+					<paper-toast class="toastCenter" id="toastKosong" text="Tolong Isi Minimal 1!">
+						<paper-button v-on:click="toastKosong.toggle()" class="yellow-button">OK!</paper-button>
+					</paper-toast>
 				</form>
-		</iron-form>		
+				<paper-toast id="toastFailed" class="toastCenter" text="Maaf username ini sudah pernah mengisi polling...!"></paper-toast>
+				<paper-toast id="toastSuccess" class="toastCenter" text="Terima Kasih, polling anda sudah terkirim...">
+					<paper-button v-on:click="toastSuccess.close()" class="yellow-button">OK!</paper-button>
+				</paper-toast>
+
+				<paper-button raised onclick="toast1.open()">Persistent toast</paper-button>
+
+				<paper-toast id="toast1" duration="0" text="This toast will stay opened until you close it, or open another toast.">
+					<paper-button onclick="toast1.toggle()" class="yellow-button">Close now!</paper-button>
+				</paper-toast>
+
+		</iron-form>
+			<br>
+			<br>
+		<!-- <paper-button raised v-on:click="toast.open()">Open toast</paper-button>
+		<paper-checkbox>Asdf</paper-checkbox> -->
+		<!-- {{ route }} -->
 	</template>
  
   <script>		
@@ -153,25 +186,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				}
 				var result = {};
 				result['hasil_jawab'] = hasil_jawab; 	
-				result['id_responden'] = "1"; 	
+				result['id_responden'] = "97"; 	
 				result['id_survey'] = formData.idSurvey[0]; 
 
 					if (JSON.stringify(hasil_jawab) === "{}"){
-						alert("Isi Minimal 1");
+						// alert("Isi Minimal 1");
+						this.$.toastKosong.open();
 						console.log(hasil_jawab);
 					} else {
 						this.$.postRespondenAjax.body = result;
 						this.$.postRespondenAjax.generateRequest();
-						console.log(hasil_jawab);
+						// console.log(hasil_jawab);
 					}
 					
 			}
 			
-			_onResponse() {
-				alert("Berhasil");
-			} 
-			_onError() {
-				alert("Gagal");
+			_onResponse(e) {
+				var response = e.detail.response.result;
+				// console.log(response.msg);
+				if (response.msg == "gagal") {
+					// console.log('Maaf username ini sudah pernah mengisi polling...!');
+					this.$.toastFailed.open();
+				} else if(response.msg == "OK") {
+					this.$.toastSuccess.open();
+					// alert('Terima Kasih, polling anda sudah terkirim...');
+				} else (
+					alert('Error')
+				)
 			}
 		}
 

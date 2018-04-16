@@ -25,7 +25,8 @@
     "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.2",
     "paper-styles": "PolymerElements/paper-styles#^2.1.0",
     "paper-card": "PolymerElements/paper-card#^2.1.0",
-    "iron-form": "PolymerElements/iron-form#^2.3.0"
+    "iron-form": "PolymerElements/iron-form#^2.3.0",
+    "paper-toast": "PolymerElements/paper-toast#^2.1.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"
