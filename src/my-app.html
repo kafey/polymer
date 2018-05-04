@@ -22,6 +22,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/granite-bootstrap/granite-bootstrap.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
+
 <link rel="lazy-import" href="home-surveys.html">
 <link rel="lazy-import" href="list-polls.html">
 <!--
@@ -33,8 +53,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        --app-primary-color: #4285f4;
+        --app-primary-color: #f14c4c;
         --app-secondary-color: black;
+        --app-drawer-width: 256px;
         display: block;
       }
       app-drawer-layout:not([narrow]) [drawer-toggle] {
@@ -47,8 +68,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
       }
+      app-drawer {
+        /* --app-drawer-scrim-background: rgb(255, 60, 132); */
+        --app-drawer-content-container: {
+          /* background-color: rgb(255, 60, 132); */
+        }
+      }
+      
+      .white-button {
+				text-transform: none;
+        text-decoration-line: none;
+				color: #fff;
+			}
+
       .drawer-list {
         margin: 0 20px;
+        width: 900px;
       }
       .drawer-list a {
         display: block;
@@ -61,6 +96,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: black;
         font-weight: bold;
       }
+
+      ::-webkit-scrollbar {
+					width: 10px;
+					background: transparent;
+			}
+			
+			::-webkit-scrollbar-thumb {
+					background: #ffffff;
+			}
     </style>
 
     <app-location route="{{route}}" use-hash-as-path url-space-regex="^[[rootPath]]"></app-location>
@@ -72,13 +116,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}">
     </app-route>
 
-    <app-drawer-layout fullbleed narrow="{{narrow}}">
+    <app-drawer-layout force-narrow fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
+      <!-- style="background-color: #D81159;"  -->
+      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" close>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="home-surveys" href="#[[rootPath]]home-surveys">Survey</a>
-          <a name="list-polls" href="#[[rootPath]]list-polls">Poll</a>
+          <a name="home-surveys" href="#[[rootPath]]home-surveys">
+            <iron-icon icon="assignment"></iron-icon> &nbsp; Survey
+          </a>
+          <a name="list-polls" href="#[[rootPath]]list-polls">
+            <iron-icon class="page-icons" icon="social:poll"></iron-icon> &nbsp; Poll
+          </a>
+          <!-- <a name="register-login" href="#[[rootPath]]register-login">Login</a> -->
         
         </iron-selector>
       </app-drawer>
@@ -86,11 +136,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
-        <app-header slot="header" condenses reveals effects="waterfall">
+        <app-header slot="header" condenses reveals effects="waterfall" hidden="[[notLoggedIn]]">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>My App</div>
-            <a name="register-login" href="[[rootPath]]register-login">Log in</a>
+            <div main-title>My Poll</div>
+            <a name="register-login" class="white-button" href="#[[rootPath]]register-login">Log in</a>
           </app-toolbar>
         </app-header>
 
@@ -153,6 +203,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       _showPage404() {
         this.page = 'view404';
+      }
+
+      notLoggedIn() {
+        console.log(localStorage.getItem('polymerToken'));
+
+        this.resetLayout();
       }
     }
     window.customElements.define(MyApp.is, MyApp);

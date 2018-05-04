@@ -23,6 +23,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
 
+			.card-polls {
+        margin: 10px;
+        padding: 0px;
+        color: #757575;
+        border-radius: 5px;
+        background-color: #fff;
+				width: 31%;
+				position: relative;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      } .polls-wrapper {
+				position: relative;
+        background: transparent;
+        margin-top: 20px;
+				width: 90%	;
+				display: inline-block;
+				margin-left: 50%;
+				transform: translateX(-50%);
+				-ms-transform: translateX(-50%);
+			}
+
       .circle {
         display: inline-block;
         width: 64px;
@@ -36,10 +56,229 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       h1 {
-        margin: 16px 0;
+        margin: 0px;
         color: #212121;
         font-size: 22px;
       }
+
+			p {
+        margin: 0px;
+        color: #212121;
+      }
+
+      h3 {
+        margin: 0px;
+        color: #212121;
+        font-weight: 400;
+      }
+
+      .yellow-button {
+				text-transform: none;
+				color: #eeff41;
+			}
+
+			.submit-button {
+				background-color: rgb(50, 135, 205);
+				color: white;
+				text-align: right;
+			}
+
+			.toastCenter {
+				/* width: 450px; */
+				/* margin-left: calc(50vw - 150px); */
+				position: fixed top;
+			}
+			
+			paper-radio-group {
+				padding: 15px;
+			}
+			
+			paper-radio-button {
+				padding: 0px;
+			}
+			
+			html {
+				overflow: scroll;
+				overflow-x: hidden;
+			}
+			
+			.q{
+				position: absolute;
+				float: center;
+				padding-left: 15px;
+				padding-right: 15px;
+				background: #fff;
+				/* border-bottom: 2px solid black; */
+				/* margin-left: 10%; */
+			}
+
+			::-webkit-scrollbar {
+					width: 10px;
+					background: transparent;
+			}
+			
+			::-webkit-scrollbar-thumb {
+					background: #dcdcdc;
+          border-radius: 20px;
+			}
+
+			::-webkit-scrollbar-thumb:hover {
+					background: #adadad;
+          border-radius: 20px;
+					transition-delay: 200ms;
+			}
+			
+			paper-button.green {
+				background-color: var(--paper-green-500);
+				color: white;
+				border: 0px;
+			}
+
+      paper-button.login-button {
+        background-color: #5da8da;
+				color: white;
+      }
+
+			.contribute-button {
+        /* background-color: #5da8da; */
+				color: black;
+      }
+
+      paper-card.login{
+				position: absolute;
+				float: center;
+        background: rgba(255, 255, 255);
+				padding-left: 15px;
+				padding-right: 15px;
+        width: 450px; 
+        /* margin-left: 30%; */
+        margin-top: 20px;
+        padding: 30px;
+
+				display: inline-block;
+				margin-left: 50%; /* From parent width */
+				transform: translateX(-50%); /* use self width which can be unknown */
+				-ms-transform: translateX(-50%); /* For IE9 */
+			}
+
+			.cover-screen {
+				background: black;
+				opacity: 1;
+				z-index: 1;
+				height: 100%;
+				width: 100%;
+				position: fixed;
+				top: 0;
+				left: 0;
+				overflow-x: hidden;
+				background-color: rgb(0,0,0);
+				background-color: rgba(0,0,0, 0.9);
+				transition: 1s;
+			} .cover-screen-content {
+				position: relative;
+				top: 25%;
+				width: 100%;
+				text-align: center;
+				margin-top: 30px;
+				color: white;
+			} .cover-screen-content h1 {
+				color: white;
+			}
+
+			.form-container {
+				position: absolute;
+        background: transparent;
+				padding-left: 15px;
+				padding-right: 15px;
+        width: 760px; 
+        margin-top: 20px;
+        padding: 30px;
+
+				display: inline-block;
+				margin-left: 50%;
+				transform: translateX(-50%);
+				-ms-transform: translateX(-50%);
+			}
+
+			.container {
+				text-align: right;
+			}
+
+			.page-icons {
+				width: 90px;
+				color: #D81159;
+			}.page-icons:hover{
+				color: rgb(252, 61, 131);
+			}
+
+      @media screen and (max-width: 1000px) {
+				.form-container {
+					width: 90%;
+				}
+
+				.card-polls {
+					width: 31%;
+				}
+
+      }
+
+      @media screen and (max-width: 640px) {
+				.q {
+				position: absolute;
+				float: center;
+				padding-left: 15px;
+				padding-right: 15px;
+				width: 100%;
+				margin-left: 0;
+				}
+
+				::-webkit-scrollbar-thumb{
+					display: none;
+				}
+
+				::-webkit-scrollbar{
+					display: none;
+				}
+
+				.container {					
+					margin-right: 0%;
+				}
+
+				.toastCenter {
+					width: 80%;
+					margin-left: 10%;
+					position: fixed top;
+        }
+
+        paper-card.login {
+					width: 100%;
+					margin-top: 0%;
+					height: 100%;
+				}
+
+				.form-container {
+					position: absolute;
+					background: transparent;
+					padding-left: 15px;
+					padding-right: 15px;
+					width: 100%; 
+					/* margin-left: 30%; */
+					margin-top: 0px;	
+					padding: 0px;
+
+					display: inline-block;
+					margin-left: 50%; /* From parent width */
+					transform: translateX(-50%); /* use self width which can be unknown */
+					-ms-transform: translateX(-50%); /* For IE9 */
+				}
+
+				.card-polls {
+					width: 90%;
+					margin-left: 50%;
+					transform: translateX(-50%);
+				}
+			}
+
     </style>
   </template>
 </dom-module>

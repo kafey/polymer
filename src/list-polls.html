@@ -11,29 +11,69 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="my-view2">
+<dom-module id="list-polls">
   <template>
+    <!-- <style include="granite-bootstrap"></style>  -->
+  
     <style include="shared-styles">
       :host {
         display: block;
 
         padding: 10px;
       }
+
+      h3 {
+        display: block;
+        white-space: nowrap;
+        width: 12em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: black; /* This needs to match the color of the anchor tag */
+      }
     </style>
 
-    <div class="card">
-      <div class="circle">2</div>
-      <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-    </div>
-  </template>
+    <!-- <div class="polls-wrapper">       -->
+      <paper-card class="card-polls" image="https://thumbs.dreamstime.com/b/man-s-hand-holding-ballot-paper-putting-ballot-box-elections-voting-election-theme-55377569.jpg">
+        <div class="card-content">
+          <h3 style="font-weight: 500;">PILKADAL</h3>
+          <p style="color: grey;"><i>created by admin, today at 21.59</i></p>
+          <p>315 Responses</p>
+        </div>
+        <div style="width: 95%; text-align: right; padding-right: 10px; padding-bottom: 10px;">
+          <a href="#[[rootPath]]home-surveys" class="contribute-button" style="text-align: right;">Contribute!</a>
+        </div>
+      </paper-card>
+      
+      <paper-card class="card-polls" image="https://image.freepik.com/free-vector/election-day-concept-icon-hand-putting-voting-paper-in-the-ballot-box_7188-519.jpg">
+        <div class="card-content">
+          <h3 style="font-weight: 500;">PILPRES</h3>
+          <p style="color: grey;"><i>created by admin, 3 years ago at 21.59</i></p>
+          <p>92,003 Responses</p>
+        </div>
+        <div style="width: 95%; text-align: right; padding-right: 10px; padding-bottom: 10px;">
+          <a href="#[[rootPath]]home-surveys" class="contribute-button" style="text-align: right;">Contribute!</a>
+        </div>
+      </paper-card>
 
+      <paper-card class="card-polls" image="https://image.freepik.com/free-vector/hand-holding-a-pen-and-filling-out-a-form_23-2147613534.jpg">
+        <div class="card-content">
+          <h3 style="font-weight: 500;">Customer Experience</h3>
+          <p style="color: grey;"><i>created by admin, yesterday   at 21.59</i></p>
+          <p>25 Responses</p>
+        </div>
+        <div style="width: 95%; text-align: right; padding-right: 10px; padding-bottom: 10px;">
+          <a href="#[[rootPath]]home-surveys" class="contribute-button" style="text-align: right;">Contribute!</a>
+        </div>
+      </paper-card>
+    <!-- </div> -->
+
+  </template>
+  
   <script>
-    class MyView2 extends Polymer.Element {
-      static get is() { return 'my-view2'; }
+    class listPolls extends Polymer.Element {
+      static get is() { return 'list-polls'; }
     }
 
-    window.customElements.define(MyView2.is, MyView2);
+    window.customElements.define(listPolls.is, listPolls);
   </script>
 </dom-module>

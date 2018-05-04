@@ -25,63 +25,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
 
-
-
 <dom-module id="home-surveys">
   <template>
-		<style include="granite-bootstrap"></style>
-
+		
     <style include="shared-styles">
       :host {
         display: block;
 
-        padding: 10px;
+        /* padding: 10px; */
       }
-
-			.yellow-button {
-				text-transform: none;
-				color: #eeff41;
-			}
-
-			.toastCenter {
-				width: 450px;
-				margin-left: calc(50vw - 150px);
-				position: fixed top;
-			}
-			
-			paper-radio-group {
-				padding: 15px;
-			}
-			
-			paper-radio-button {
-				padding: 0px;
-			}
-			
-			html {
-				overflow: scroll;
-				overflow-x: hidden;
-			}
-			
-			paper-card.q{
-				width: 70%;
-				float: center;
-				padding-left: 15px;
-				padding-right: 15px;
-			}
-			::-webkit-scrollbar {
-					width: 0px;
-					background: transparent;
-			}
-			
-			::-webkit-scrollbar-thumb {
-					background: #ffffff;
-			}
-			
-			paper-button.green {
-				background-color: var(--paper-green-500);
-				color: white;
-				border: 0px;
-			}
     </style>
 		
 		<iron-ajax 
@@ -103,65 +55,74 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      method="get"
      handle-as="json"
      last-response="{{data}}">
-    </iron-ajax>
-
+		</iron-ajax>
+		
+		<!-- <div class="cover-screen" id="overlays">
+			<div class="cover-screen-content">
+				<h1>Hello... im cover screen...</h1>
+				<paper-button on-click="hideThis"> 
+					TAKE THE SURVEY
+				</paper-button>
+			</div>
+		</div> -->
+	<div class="form-container">
 		<iron-form id="myForm">
-				<form method="get">
-					<h1>{{title}}</h1>
+			<form method="get">
+				<h1>{{title}}</h1>
 
-					<iron-list items="[[data.result]]" style="height:40em" as="list">						
+				<iron-list items="[[data.result]]" style="height:40em" as="list">						
 					<template>
-						<paper-card id="paperCard" class="q offset-sm-2">
-							<h5 style="margin-top: 20px;">[[list.pertanyaan]]?<br></h5>
+						<div id="paperCard" class="offset-sm-2 col-sm-8 absolute q">
+							<h3 style="text-transform: capitalize; margin-top: 20px;">[[list.pertanyaan]]?</h3>
 							<div>
 								<paper-radio-group attr-for-selected="value" id="radioGroup" name="jawaban" selected="{{selected}}">
+									
 									<template is="dom-repeat" items="[[list.pilihan]]">
-										<paper-radio-button 
-										name="jawabanX[[list.id_poll]]" 
-										class="radio" 
-										value="{{item}}"
-										id="itemRadio"
-										noink
-										>
-										{{item}}
-									</paper-radio-button><br>
+										<!-- <div style="background: cadetblue; width: 800px;" class="jawaban"> -->
+											<paper-radio-button 
+												name="jawaban$[[list.id_poll]]" 
+												class="radio" 
+												value="{{item}}"
+												id="itemRadio"
+												noink
+												>
+												{{item}}
+											</paper-radio-button>
+										<!-- </div> -->
+								<br>
 								</template>
 							</paper-radio-group>
 						</div>
 						<input type="text" name="idPolls" value="[[list.id_poll]]" hidden>
 						<input type="text" name="idSurvey" value="[[list.id_survey]]" hidden>
-						</paper-card>
-					</template>			 
-				</iron-list>
-				<paper-card class="q offset-sm-2">
-					<paper-button raised on-click="mySubmit">Submit</paper-button>
-				</paper-card>
-					<paper-toast class="toastCenter" id="toastKosong" text="Tolong Isi Minimal 1!">
-						<paper-button v-on:click="toastKosong.toggle()" class="yellow-button">OK!</paper-button>
-					</paper-toast>
-				</form>
-				<paper-toast id="toastFailed" class="toastCenter" text="Maaf username ini sudah pernah mengisi polling...!"></paper-toast>
-				<paper-toast id="toastSuccess" class="toastCenter" text="Terima Kasih, polling anda sudah terkirim...">
-					<paper-button v-on:click="toastSuccess.close()" class="yellow-button">OK!</paper-button>
+					</div>
+				</template>			 
+			</iron-list>
+			<!-- <paper-card id="paperCard" class="q" style="background: transparent;"> -->
+				<br>
+				<div class="container">
+					<paper-button class="submit-button" style="text-align: right;" raised on-click="mySubmit">Submit</paper-button>
+				</div>
+				<!-- </paper-card> -->
+				<paper-toast class="toastCenter" id="toastKosong" text="Tolong Isi Minimal 1!">
+					<paper-button on-click="close" class="yellow-button">OK!</paper-button>
 				</paper-toast>
-
-				<paper-button raised onclick="toast1.open()">Persistent toast</paper-button>
-
-				<paper-toast id="toast1" duration="0" text="This toast will stay opened until you close it, or open another toast.">
-					<paper-button onclick="toast1.toggle()" class="yellow-button">Close now!</paper-button>
-				</paper-toast>
-
+			</form>
+			<paper-toast id="toastFailed" class="toastCenter" text="Maaf username ini sudah pernah mengisi polling...!">
+				<paper-button on-click="close" class="yellow-button">Kembali</paper-button>
+			</paper-toast>
+			<paper-toast id="toastSuccess" class="toastCenter" text="Terima Kasih, polling anda sudah terkirim...">
+				<paper-button on-click="close" class="yellow-button">Selesai</paper-button>
+			</paper-toast>				
+			
 		</iron-form>
-			<br>
-			<br>
-		<!-- <paper-button raised v-on:click="toast.open()">Open toast</paper-button>
-		<paper-checkbox>Asdf</paper-checkbox> -->
-		<!-- {{ route }} -->
+	</div>
+		<br>
 	</template>
  
   <script>		
 		class HomeSurveys extends Polymer.Element {
-				static get is() { 
+			static get is() { 
         return 'home-surveys';
 			}
 
@@ -169,7 +130,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          this.$.getSurveyAjax.generateRequest();
        }*/
 			
-			mySubmit() {
+		mySubmit() {
 			var formData =	this.$['myForm'].serializeForm();
 			var formJSON = JSON.stringify(formData);
 			
@@ -179,26 +140,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 				for (var key in formData) {
 					if (key.includes("jawaban")){
-						var strSplit = key.split("X");
+						var strSplit = key.split("$");
 						
 						hasil_jawab[strSplit[1]] = formData[key];
 					}
 				}
 				var result = {};
 				result['hasil_jawab'] = hasil_jawab; 	
-				result['id_responden'] = "97"; 	
+				result['id_responden'] = "82"; 	
 				result['id_survey'] = formData.idSurvey[0]; 
 
 					if (JSON.stringify(hasil_jawab) === "{}"){
 						// alert("Isi Minimal 1");
 						this.$.toastKosong.open();
+						// this.$.toastKosong.fitInto = this.$.paperCard;
 						console.log(hasil_jawab);
 					} else {
 						this.$.postRespondenAjax.body = result;
 						this.$.postRespondenAjax.generateRequest();
-						// console.log(hasil_jawab);
+						console.log(hasil_jawab);
 					}
 					
+			}
+
+			close() {
+				this.$.toastKosong.close();
+				this.$.toastSuccess.close();
+				this.$.toastFailed.close();
+			}
+
+			hideThis() {
+				this.$.overlays.style.opacity = "0";
+				this.$.overlays.style.width = "0%";
 			}
 			
 			_onResponse(e) {
